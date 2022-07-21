@@ -1,4 +1,5 @@
-# Sample Makefile for Marsdev (SGDK version)
+# Makefile for BLAZE ENGINE
+# adapted from sample Makefile for Marsdev (SGDK version)
 
 # Default paths, can be overridden by setting MARSDEV before calling make
 MARSDEV ?= ${HOME}/devel/mars
@@ -12,12 +13,15 @@ AS   = $(MARSBIN)/m68k-elf-as
 LD   = $(MARSBIN)/m68k-elf-ld
 NM   = $(MARSBIN)/m68k-elf-nm
 OBJC = $(MARSBIN)/m68k-elf-objcopy
+SIZE = $(MARSBIN)/m68k-elf-size
+
 # SGDK Tools
 BINTOS   = $(TOOLSBIN)/bintos
 PCMTORAW = $(TOOLSBIN)/pcmtoraw
 RESCOMP  = $(TOOLSBIN)/rescomp
 WAVTORAW = $(TOOLSBIN)/wavtoraw
 XGMTOOL  = $(TOOLSBIN)/xgmtool
+
 # Use rescomp jar for SGDK > 1.33
 ifneq ("$(wildcard $(TOOLSBIN)/rescomp.jar)","")
 	RESCOMP = java -jar $(TOOLSBIN)/rescomp.jar
@@ -96,7 +100,7 @@ debug: out.bin symbol.txt
 # even with an optimized release build!
 # Cross reference symbol.txt with the addresses displayed in the crash handler
 symbol.txt: out.bin
-	$(NM) --plugin=$(PLUGIN)/$(LTO_SO) -n out.elf > symbol.txt
+	@$(NM) --plugin=$(PLUGIN)/$(LTO_SO) -n out.elf > symbol.txt
 
 boot/sega.o: boot/rom_head.bin
 	@echo "AS $<"
@@ -107,13 +111,17 @@ boot/rom_head.bin: boot/rom_head.c
 	@$(CC) $(CFLAGS) $(INCS) -nostdlib -Wl,--oformat=binary $< -o $@
 
 %.bin: %.elf
+	@echo "Getting ELF sizes..."
+	-rm size.txt
+	@$(SIZE) -A $< > size.txt
 	@echo "Stripping ELF header..."
 	@$(OBJC) -O binary $< temp.bin
 	@dd if=temp.bin of=$@ bs=8192 conv=sync
 	@rm -f temp.bin
 
 %.elf: boot/sega.o $(OBJS)
-	$(CC) -o $@ $(LDFLAGS) boot/sega.o $(OBJS) $(LIBS)
+	@echo "LD $@"
+	@$(CC) -o $@ $(LDFLAGS) boot/sega.o $(OBJS) $(LIBS)
 
 %.o: %.c
 	@echo "CC $<"
