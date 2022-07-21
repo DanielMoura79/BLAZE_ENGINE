@@ -42,7 +42,7 @@ bool FUNCAO_COLISAO(s16 R1x1, s16 R1y1, s16 R1x2, s16 R1y2, s16 R2x1, s16 R2y1, 
 void CLEAR_VDP();
 
 //--- VARIAVEIS ---//
-bool show_debug = 0; //Exibe o debug (caixas de colisao e outros)
+bool show_debug = 1; //Exibe o debug (caixas de colisao e outros)
 u32 frames = 0; //controle de tempo
 u8 room = 8; //sala inicial
 s16 MAX_ENERGY = 55; //energia maxima
