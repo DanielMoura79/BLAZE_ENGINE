@@ -22,27 +22,30 @@
 #define ENEMYS_SFX 67
 
 //--- FUNCOES ---//
-void FUNCAO_INPUT_SYSTEM();
-void FUNCAO_INIT_PLAYERS();
-void CREATE_ENEMY(u8 ID, u16 State, s16 pX, s16 pY);
-void FUNCAO_FSM();
-void FUNCAO_FISICA();
-void FUNCAO_CAMERA();
-void FUNCAO_GERENCIAR_OBJS();
-void FUNCAO_MOVER_OBJS();
-void FUNCAO_SPRITE_POSITION();
-void PLAYER_STATE(u8 Player, u16 State);
-void ENEMY_STATE(u8 Enemy, u16 State);
-void FUNCAO_CTRL_SLOTS_BGS();
-void FUNCAO_ANIMACAO();
-void FUNCAO_PLAY_SND(u8 CharID, u16 State, u8 Chanel);
-void FUNCAO_FSM_HITBOXES(u8 Player);
-void FUNCAO_FSM_HITBOXES_ENEMYS(u8 Enemy);
-bool FUNCAO_COLISAO(s16 R1x1, s16 R1y1, s16 R1x2, s16 R1y2, s16 R2x1, s16 R2y1, s16 R2x2, s16 R2y2);
-void CLEAR_VDP();
+void FUNCAO_INPUT_SYSTEM(void);
+void FUNCAO_INIT_PLAYERS(void);
+void CREATE_ENEMY(const u8 ID, const u16 State, const s16 pX, const s16 pY);
+void FUNCAO_FSM(void);
+void FUNCAO_FISICA(void);
+void FUNCAO_CAMERA(void);
+void FUNCAO_GERENCIAR_OBJS(void);
+void FUNCAO_MOVER_OBJS(void);
+void FUNCAO_SPRITE_POSITION(void);
+void PLAYER_STATE(const u8 Player, u16 State);
+void ENEMY_STATE(const u8 Enemy, u16 State);
+void FUNCAO_CTRL_SLOTS_BGS(void);
+void FUNCAO_ANIMACAO(void);
+void FUNCAO_PLAY_SND(const u8 CharID, const u16 State, const u8 Chanel);
+void FUNCAO_FSM_HITBOXES(const u8 Player);
+void FUNCAO_FSM_HITBOXES_ENEMYS(const u8 Enemy);
+bool FUNCAO_COLISAO(s16 R1x1, const s16 R1y1,
+					s16 R1x2, const s16 R1y2,
+					s16 R2x1, const s16 R2y1,
+					s16 R2x2, const s16 R2y2);
+void CLEAR_VDP(void);
 
 //--- VARIAVEIS ---//
-bool show_debug = 0; //Exibe o debug (caixas de colisao e outros)
+bool show_debug = 1; //Exibe o debug (caixas de colisao e outros)
 u32 frames = 0; //controle de tempo
 u8 room = 8; //sala inicial
 s16 MAX_ENERGY = 55; //energia maxima
@@ -231,8 +234,12 @@ struct EnemyDEF {
 	u8 key_JOY_countdown[10]; //timer regressivo, ativado apos pressionar um botao direcional (usado para correr, esquivar, etc)
 }; struct EnemyDEF E[MAX_ENEMYS];
 
+#define UNUSED_PARAMETER(X) ((void)X)
+
 int main(u16 hard) //--- MAIN ---//
 {
+	UNUSED_PARAMETER(hard);
+
     //inicializacao da VDP (Video Display Processor)
 	SYS_disableInts();
 	 VDP_init();
@@ -810,131 +817,13 @@ int main(u16 hard) //--- MAIN ---//
 			//atualiza barras de energia
 			if(spr_energy_slot1)
 			{
-				switch ( P[1].energy )
-				{
-					case  0: SPR_setAnimAndFrame(spr_energy_slot1, 0,  0); break;
-					case  1: SPR_setAnimAndFrame(spr_energy_slot1, 0,  1); break;
-					case  2: SPR_setAnimAndFrame(spr_energy_slot1, 0,  2); break;
-					case  3: SPR_setAnimAndFrame(spr_energy_slot1, 0,  3); break;
-					case  4: SPR_setAnimAndFrame(spr_energy_slot1, 0,  4); break;
-					case  5: SPR_setAnimAndFrame(spr_energy_slot1, 0,  5); break;
-					case  6: SPR_setAnimAndFrame(spr_energy_slot1, 0,  6); break;
-					case  7: SPR_setAnimAndFrame(spr_energy_slot1, 0,  7); break;
-					case  8: SPR_setAnimAndFrame(spr_energy_slot1, 0,  8); break;
-					case  9: SPR_setAnimAndFrame(spr_energy_slot1, 0,  9); break;
-					case 10: SPR_setAnimAndFrame(spr_energy_slot1, 0, 10); break;
-					case 11: SPR_setAnimAndFrame(spr_energy_slot1, 0, 11); break;
-					case 12: SPR_setAnimAndFrame(spr_energy_slot1, 0, 12); break;
-					case 13: SPR_setAnimAndFrame(spr_energy_slot1, 0, 13); break;
-					case 14: SPR_setAnimAndFrame(spr_energy_slot1, 0, 14); break;
-					case 15: SPR_setAnimAndFrame(spr_energy_slot1, 0, 15); break;
-					case 16: SPR_setAnimAndFrame(spr_energy_slot1, 0, 16); break;
-					case 17: SPR_setAnimAndFrame(spr_energy_slot1, 0, 17); break;
-					case 18: SPR_setAnimAndFrame(spr_energy_slot1, 0, 18); break;
-					case 19: SPR_setAnimAndFrame(spr_energy_slot1, 0, 19); break;
-					case 20: SPR_setAnimAndFrame(spr_energy_slot1, 0, 20); break;
-					case 21: SPR_setAnimAndFrame(spr_energy_slot1, 0, 21); break;
-					case 22: SPR_setAnimAndFrame(spr_energy_slot1, 0, 22); break;
-					case 23: SPR_setAnimAndFrame(spr_energy_slot1, 0, 23); break;
-					case 24: SPR_setAnimAndFrame(spr_energy_slot1, 0, 24); break;
-					case 25: SPR_setAnimAndFrame(spr_energy_slot1, 0, 25); break;
-					case 26: SPR_setAnimAndFrame(spr_energy_slot1, 0, 26); break;
-					case 27: SPR_setAnimAndFrame(spr_energy_slot1, 0, 27); break;
-					case 28: SPR_setAnimAndFrame(spr_energy_slot1, 0, 28); break;
-					case 29: SPR_setAnimAndFrame(spr_energy_slot1, 0, 29); break;
-					case 30: SPR_setAnimAndFrame(spr_energy_slot1, 0, 30); break;
-					case 31: SPR_setAnimAndFrame(spr_energy_slot1, 0, 31); break;
-					case 32: SPR_setAnimAndFrame(spr_energy_slot1, 0, 32); break;
-					case 33: SPR_setAnimAndFrame(spr_energy_slot1, 0, 33); break;
-					case 34: SPR_setAnimAndFrame(spr_energy_slot1, 0, 34); break;
-					case 35: SPR_setAnimAndFrame(spr_energy_slot1, 0, 35); break;
-					case 36: SPR_setAnimAndFrame(spr_energy_slot1, 0, 36); break;
-					case 37: SPR_setAnimAndFrame(spr_energy_slot1, 0, 37); break;
-					case 38: SPR_setAnimAndFrame(spr_energy_slot1, 0, 38); break;
-					case 39: SPR_setAnimAndFrame(spr_energy_slot1, 0, 39); break;
-					case 40: SPR_setAnimAndFrame(spr_energy_slot1, 0, 40); break;
-					case 41: SPR_setAnimAndFrame(spr_energy_slot1, 0, 41); break;
-					case 42: SPR_setAnimAndFrame(spr_energy_slot1, 0, 42); break;
-					case 43: SPR_setAnimAndFrame(spr_energy_slot1, 0, 43); break;
-					case 44: SPR_setAnimAndFrame(spr_energy_slot1, 0, 44); break;
-					case 45: SPR_setAnimAndFrame(spr_energy_slot1, 0, 45); break;
-					case 46: SPR_setAnimAndFrame(spr_energy_slot1, 0, 46); break;
-					case 47: SPR_setAnimAndFrame(spr_energy_slot1, 0, 47); break;
-					case 48: SPR_setAnimAndFrame(spr_energy_slot1, 0, 48); break;
-					case 49: SPR_setAnimAndFrame(spr_energy_slot1, 0, 49); break;
-					case 50: SPR_setAnimAndFrame(spr_energy_slot1, 0, 50); break;
-					case 51: SPR_setAnimAndFrame(spr_energy_slot1, 0, 51); break;
-					case 52: SPR_setAnimAndFrame(spr_energy_slot1, 0, 52); break;
-					case 53: SPR_setAnimAndFrame(spr_energy_slot1, 0, 53); break;
-					case 54: SPR_setAnimAndFrame(spr_energy_slot1, 0, 54); break;
-					case 55: SPR_setAnimAndFrame(spr_energy_slot1, 0, 55); break;
-					case 56: SPR_setAnimAndFrame(spr_energy_slot1, 0, 56); break;
-				}
+				SPR_setAnimAndFrame(spr_energy_slot1, 0, P[1].energy);
 			}
+
 			if(qtdePlayers>=2 && spr_energy_slot2)
 			{
-				switch ( P[2].energy )
-				{
-					case  0: SPR_setAnimAndFrame(spr_energy_slot2, 0,  0); break;
-					case  1: SPR_setAnimAndFrame(spr_energy_slot2, 0,  1); break;
-					case  2: SPR_setAnimAndFrame(spr_energy_slot2, 0,  2); break;
-					case  3: SPR_setAnimAndFrame(spr_energy_slot2, 0,  3); break;
-					case  4: SPR_setAnimAndFrame(spr_energy_slot2, 0,  4); break;
-					case  5: SPR_setAnimAndFrame(spr_energy_slot2, 0,  5); break;
-					case  6: SPR_setAnimAndFrame(spr_energy_slot2, 0,  6); break;
-					case  7: SPR_setAnimAndFrame(spr_energy_slot2, 0,  7); break;
-					case  8: SPR_setAnimAndFrame(spr_energy_slot2, 0,  8); break;
-					case  9: SPR_setAnimAndFrame(spr_energy_slot2, 0,  9); break;
-					case 10: SPR_setAnimAndFrame(spr_energy_slot2, 0, 10); break;
-					case 11: SPR_setAnimAndFrame(spr_energy_slot2, 0, 11); break;
-					case 12: SPR_setAnimAndFrame(spr_energy_slot2, 0, 12); break;
-					case 13: SPR_setAnimAndFrame(spr_energy_slot2, 0, 13); break;
-					case 14: SPR_setAnimAndFrame(spr_energy_slot2, 0, 14); break;
-					case 15: SPR_setAnimAndFrame(spr_energy_slot2, 0, 15); break;
-					case 16: SPR_setAnimAndFrame(spr_energy_slot2, 0, 16); break;
-					case 17: SPR_setAnimAndFrame(spr_energy_slot2, 0, 17); break;
-					case 18: SPR_setAnimAndFrame(spr_energy_slot2, 0, 18); break;
-					case 19: SPR_setAnimAndFrame(spr_energy_slot2, 0, 19); break;
-					case 20: SPR_setAnimAndFrame(spr_energy_slot2, 0, 20); break;
-					case 21: SPR_setAnimAndFrame(spr_energy_slot2, 0, 21); break;
-					case 22: SPR_setAnimAndFrame(spr_energy_slot2, 0, 22); break;
-					case 23: SPR_setAnimAndFrame(spr_energy_slot2, 0, 23); break;
-					case 24: SPR_setAnimAndFrame(spr_energy_slot2, 0, 24); break;
-					case 25: SPR_setAnimAndFrame(spr_energy_slot2, 0, 25); break;
-					case 26: SPR_setAnimAndFrame(spr_energy_slot2, 0, 26); break;
-					case 27: SPR_setAnimAndFrame(spr_energy_slot2, 0, 27); break;
-					case 28: SPR_setAnimAndFrame(spr_energy_slot2, 0, 28); break;
-					case 29: SPR_setAnimAndFrame(spr_energy_slot2, 0, 29); break;
-					case 30: SPR_setAnimAndFrame(spr_energy_slot2, 0, 30); break;
-					case 31: SPR_setAnimAndFrame(spr_energy_slot2, 0, 31); break;
-					case 32: SPR_setAnimAndFrame(spr_energy_slot2, 0, 32); break;
-					case 33: SPR_setAnimAndFrame(spr_energy_slot2, 0, 33); break;
-					case 34: SPR_setAnimAndFrame(spr_energy_slot2, 0, 34); break;
-					case 35: SPR_setAnimAndFrame(spr_energy_slot2, 0, 35); break;
-					case 36: SPR_setAnimAndFrame(spr_energy_slot2, 0, 36); break;
-					case 37: SPR_setAnimAndFrame(spr_energy_slot2, 0, 37); break;
-					case 38: SPR_setAnimAndFrame(spr_energy_slot2, 0, 38); break;
-					case 39: SPR_setAnimAndFrame(spr_energy_slot2, 0, 39); break;
-					case 40: SPR_setAnimAndFrame(spr_energy_slot2, 0, 40); break;
-					case 41: SPR_setAnimAndFrame(spr_energy_slot2, 0, 41); break;
-					case 42: SPR_setAnimAndFrame(spr_energy_slot2, 0, 42); break;
-					case 43: SPR_setAnimAndFrame(spr_energy_slot2, 0, 43); break;
-					case 44: SPR_setAnimAndFrame(spr_energy_slot2, 0, 44); break;
-					case 45: SPR_setAnimAndFrame(spr_energy_slot2, 0, 45); break;
-					case 46: SPR_setAnimAndFrame(spr_energy_slot2, 0, 46); break;
-					case 47: SPR_setAnimAndFrame(spr_energy_slot2, 0, 47); break;
-					case 48: SPR_setAnimAndFrame(spr_energy_slot2, 0, 48); break;
-					case 49: SPR_setAnimAndFrame(spr_energy_slot2, 0, 49); break;
-					case 50: SPR_setAnimAndFrame(spr_energy_slot2, 0, 50); break;
-					case 51: SPR_setAnimAndFrame(spr_energy_slot2, 0, 51); break;
-					case 52: SPR_setAnimAndFrame(spr_energy_slot2, 0, 52); break;
-					case 53: SPR_setAnimAndFrame(spr_energy_slot2, 0, 53); break;
-					case 54: SPR_setAnimAndFrame(spr_energy_slot2, 0, 54); break;
-					case 55: SPR_setAnimAndFrame(spr_energy_slot2, 0, 55); break;
-					case 56: SPR_setAnimAndFrame(spr_energy_slot2, 0, 56); break;
-				}
+				SPR_setAnimAndFrame(spr_energy_slot2, 0, P[2].energy);
 			}
-			
 		}
 		
 		/////////////
@@ -1056,67 +945,8 @@ int main(u16 hard) //--- MAIN ---//
 							SPR_setVisibility(spr_face_slot3, VISIBLE); 
 							SPR_setVisibility(spr_energy_slot3, VISIBLE);
 							P[1].CountDownEnemyInfo=200;
-							
-							switch ( E[j].energy )
-							{
-								case  0: SPR_setAnimAndFrame(spr_energy_slot3, 0,  0); break;
-								case  1: SPR_setAnimAndFrame(spr_energy_slot3, 0,  1); break;
-								case  2: SPR_setAnimAndFrame(spr_energy_slot3, 0,  2); break;
-								case  3: SPR_setAnimAndFrame(spr_energy_slot3, 0,  3); break;
-								case  4: SPR_setAnimAndFrame(spr_energy_slot3, 0,  4); break;
-								case  5: SPR_setAnimAndFrame(spr_energy_slot3, 0,  5); break;
-								case  6: SPR_setAnimAndFrame(spr_energy_slot3, 0,  6); break;
-								case  7: SPR_setAnimAndFrame(spr_energy_slot3, 0,  7); break;
-								case  8: SPR_setAnimAndFrame(spr_energy_slot3, 0,  8); break;
-								case  9: SPR_setAnimAndFrame(spr_energy_slot3, 0,  9); break;
-								case 10: SPR_setAnimAndFrame(spr_energy_slot3, 0, 10); break;
-								case 11: SPR_setAnimAndFrame(spr_energy_slot3, 0, 11); break;
-								case 12: SPR_setAnimAndFrame(spr_energy_slot3, 0, 12); break;
-								case 13: SPR_setAnimAndFrame(spr_energy_slot3, 0, 13); break;
-								case 14: SPR_setAnimAndFrame(spr_energy_slot3, 0, 14); break;
-								case 15: SPR_setAnimAndFrame(spr_energy_slot3, 0, 15); break;
-								case 16: SPR_setAnimAndFrame(spr_energy_slot3, 0, 16); break;
-								case 17: SPR_setAnimAndFrame(spr_energy_slot3, 0, 17); break;
-								case 18: SPR_setAnimAndFrame(spr_energy_slot3, 0, 18); break;
-								case 19: SPR_setAnimAndFrame(spr_energy_slot3, 0, 19); break;
-								case 20: SPR_setAnimAndFrame(spr_energy_slot3, 0, 20); break;
-								case 21: SPR_setAnimAndFrame(spr_energy_slot3, 0, 21); break;
-								case 22: SPR_setAnimAndFrame(spr_energy_slot3, 0, 22); break;
-								case 23: SPR_setAnimAndFrame(spr_energy_slot3, 0, 23); break;
-								case 24: SPR_setAnimAndFrame(spr_energy_slot3, 0, 24); break;
-								case 25: SPR_setAnimAndFrame(spr_energy_slot3, 0, 25); break;
-								case 26: SPR_setAnimAndFrame(spr_energy_slot3, 0, 26); break;
-								case 27: SPR_setAnimAndFrame(spr_energy_slot3, 0, 27); break;
-								case 28: SPR_setAnimAndFrame(spr_energy_slot3, 0, 28); break;
-								case 29: SPR_setAnimAndFrame(spr_energy_slot3, 0, 29); break;
-								case 30: SPR_setAnimAndFrame(spr_energy_slot3, 0, 30); break;
-								case 31: SPR_setAnimAndFrame(spr_energy_slot3, 0, 31); break;
-								case 32: SPR_setAnimAndFrame(spr_energy_slot3, 0, 32); break;
-								case 33: SPR_setAnimAndFrame(spr_energy_slot3, 0, 33); break;
-								case 34: SPR_setAnimAndFrame(spr_energy_slot3, 0, 34); break;
-								case 35: SPR_setAnimAndFrame(spr_energy_slot3, 0, 35); break;
-								case 36: SPR_setAnimAndFrame(spr_energy_slot3, 0, 36); break;
-								case 37: SPR_setAnimAndFrame(spr_energy_slot3, 0, 37); break;
-								case 38: SPR_setAnimAndFrame(spr_energy_slot3, 0, 38); break;
-								case 39: SPR_setAnimAndFrame(spr_energy_slot3, 0, 39); break;
-								case 40: SPR_setAnimAndFrame(spr_energy_slot3, 0, 40); break;
-								case 41: SPR_setAnimAndFrame(spr_energy_slot3, 0, 41); break;
-								case 42: SPR_setAnimAndFrame(spr_energy_slot3, 0, 42); break;
-								case 43: SPR_setAnimAndFrame(spr_energy_slot3, 0, 43); break;
-								case 44: SPR_setAnimAndFrame(spr_energy_slot3, 0, 44); break;
-								case 45: SPR_setAnimAndFrame(spr_energy_slot3, 0, 45); break;
-								case 46: SPR_setAnimAndFrame(spr_energy_slot3, 0, 46); break;
-								case 47: SPR_setAnimAndFrame(spr_energy_slot3, 0, 47); break;
-								case 48: SPR_setAnimAndFrame(spr_energy_slot3, 0, 48); break;
-								case 49: SPR_setAnimAndFrame(spr_energy_slot3, 0, 49); break;
-								case 50: SPR_setAnimAndFrame(spr_energy_slot3, 0, 50); break;
-								case 51: SPR_setAnimAndFrame(spr_energy_slot3, 0, 51); break;
-								case 52: SPR_setAnimAndFrame(spr_energy_slot3, 0, 52); break;
-								case 53: SPR_setAnimAndFrame(spr_energy_slot3, 0, 53); break;
-								case 54: SPR_setAnimAndFrame(spr_energy_slot3, 0, 54); break;
-								case 55: SPR_setAnimAndFrame(spr_energy_slot3, 0, 55); break;
-								case 56: SPR_setAnimAndFrame(spr_energy_slot3, 0, 56); break;
-							}
+
+							SPR_setAnimAndFrame(spr_energy_slot3, 0,  E[j].energy);
 						}
 						if(i==2)
 						{
@@ -1134,67 +964,8 @@ int main(u16 hard) //--- MAIN ---//
 							SPR_setVisibility(spr_face_slot4, VISIBLE); 
 							SPR_setVisibility(spr_energy_slot4, VISIBLE);
 							P[2].CountDownEnemyInfo=200;
-							
-							switch ( E[j].energy )
-							{
-								case  0: SPR_setAnimAndFrame(spr_energy_slot4, 0,  0); break;
-								case  1: SPR_setAnimAndFrame(spr_energy_slot4, 0,  1); break;
-								case  2: SPR_setAnimAndFrame(spr_energy_slot4, 0,  2); break;
-								case  3: SPR_setAnimAndFrame(spr_energy_slot4, 0,  3); break;
-								case  4: SPR_setAnimAndFrame(spr_energy_slot4, 0,  4); break;
-								case  5: SPR_setAnimAndFrame(spr_energy_slot4, 0,  5); break;
-								case  6: SPR_setAnimAndFrame(spr_energy_slot4, 0,  6); break;
-								case  7: SPR_setAnimAndFrame(spr_energy_slot4, 0,  7); break;
-								case  8: SPR_setAnimAndFrame(spr_energy_slot4, 0,  8); break;
-								case  9: SPR_setAnimAndFrame(spr_energy_slot4, 0,  9); break;
-								case 10: SPR_setAnimAndFrame(spr_energy_slot4, 0, 10); break;
-								case 11: SPR_setAnimAndFrame(spr_energy_slot4, 0, 11); break;
-								case 12: SPR_setAnimAndFrame(spr_energy_slot4, 0, 12); break;
-								case 13: SPR_setAnimAndFrame(spr_energy_slot4, 0, 13); break;
-								case 14: SPR_setAnimAndFrame(spr_energy_slot4, 0, 14); break;
-								case 15: SPR_setAnimAndFrame(spr_energy_slot4, 0, 15); break;
-								case 16: SPR_setAnimAndFrame(spr_energy_slot4, 0, 16); break;
-								case 17: SPR_setAnimAndFrame(spr_energy_slot4, 0, 17); break;
-								case 18: SPR_setAnimAndFrame(spr_energy_slot4, 0, 18); break;
-								case 19: SPR_setAnimAndFrame(spr_energy_slot4, 0, 19); break;
-								case 20: SPR_setAnimAndFrame(spr_energy_slot4, 0, 20); break;
-								case 21: SPR_setAnimAndFrame(spr_energy_slot4, 0, 21); break;
-								case 22: SPR_setAnimAndFrame(spr_energy_slot4, 0, 22); break;
-								case 23: SPR_setAnimAndFrame(spr_energy_slot4, 0, 23); break;
-								case 24: SPR_setAnimAndFrame(spr_energy_slot4, 0, 24); break;
-								case 25: SPR_setAnimAndFrame(spr_energy_slot4, 0, 25); break;
-								case 26: SPR_setAnimAndFrame(spr_energy_slot4, 0, 26); break;
-								case 27: SPR_setAnimAndFrame(spr_energy_slot4, 0, 27); break;
-								case 28: SPR_setAnimAndFrame(spr_energy_slot4, 0, 28); break;
-								case 29: SPR_setAnimAndFrame(spr_energy_slot4, 0, 29); break;
-								case 30: SPR_setAnimAndFrame(spr_energy_slot4, 0, 30); break;
-								case 31: SPR_setAnimAndFrame(spr_energy_slot4, 0, 31); break;
-								case 32: SPR_setAnimAndFrame(spr_energy_slot4, 0, 32); break;
-								case 33: SPR_setAnimAndFrame(spr_energy_slot4, 0, 33); break;
-								case 34: SPR_setAnimAndFrame(spr_energy_slot4, 0, 34); break;
-								case 35: SPR_setAnimAndFrame(spr_energy_slot4, 0, 35); break;
-								case 36: SPR_setAnimAndFrame(spr_energy_slot4, 0, 36); break;
-								case 37: SPR_setAnimAndFrame(spr_energy_slot4, 0, 37); break;
-								case 38: SPR_setAnimAndFrame(spr_energy_slot4, 0, 38); break;
-								case 39: SPR_setAnimAndFrame(spr_energy_slot4, 0, 39); break;
-								case 40: SPR_setAnimAndFrame(spr_energy_slot4, 0, 40); break;
-								case 41: SPR_setAnimAndFrame(spr_energy_slot4, 0, 41); break;
-								case 42: SPR_setAnimAndFrame(spr_energy_slot4, 0, 42); break;
-								case 43: SPR_setAnimAndFrame(spr_energy_slot4, 0, 43); break;
-								case 44: SPR_setAnimAndFrame(spr_energy_slot4, 0, 44); break;
-								case 45: SPR_setAnimAndFrame(spr_energy_slot4, 0, 45); break;
-								case 46: SPR_setAnimAndFrame(spr_energy_slot4, 0, 46); break;
-								case 47: SPR_setAnimAndFrame(spr_energy_slot4, 0, 47); break;
-								case 48: SPR_setAnimAndFrame(spr_energy_slot4, 0, 48); break;
-								case 49: SPR_setAnimAndFrame(spr_energy_slot4, 0, 49); break;
-								case 50: SPR_setAnimAndFrame(spr_energy_slot4, 0, 50); break;
-								case 51: SPR_setAnimAndFrame(spr_energy_slot4, 0, 51); break;
-								case 52: SPR_setAnimAndFrame(spr_energy_slot4, 0, 52); break;
-								case 53: SPR_setAnimAndFrame(spr_energy_slot4, 0, 53); break;
-								case 54: SPR_setAnimAndFrame(spr_energy_slot4, 0, 54); break;
-								case 55: SPR_setAnimAndFrame(spr_energy_slot4, 0, 55); break;
-								case 56: SPR_setAnimAndFrame(spr_energy_slot4, 0, 56); break;
-							}
+
+							SPR_setAnimAndFrame(spr_energy_slot4, 0, E[j].energy);
 						}
 						
 						P[i].CountDownChain = 30; //temporizador que desativa o 'activeHit', desabilitando os combos
@@ -1342,7 +1113,7 @@ int main(u16 hard) //--- MAIN ---//
 }
 
 //--- FUNCOES ---//
-void FUNCAO_INPUT_SYSTEM()
+void FUNCAO_INPUT_SYSTEM(void)
 {
 	//joystick P1
 	JOY1 = JOY_readJoypad(JOY_1);
@@ -1652,7 +1423,7 @@ void FUNCAO_INPUT_SYSTEM()
 	
 }
 
-void PLAYER_STATE(u8 Player, u16 State)
+void PLAYER_STATE(const u8 Player, u16 State)
 {
 	//padroes
 	if (P[Player].sprite){ SPR_releaseSprite(P[Player].sprite); P[Player].sprite = NULL; }
@@ -5983,7 +5754,7 @@ void PLAYER_STATE(u8 Player, u16 State)
 	*/
 }
 
-void ENEMY_STATE(u8 Enemy, u16 State)
+void ENEMY_STATE(const u8 Enemy, u16 State)
 {
 	//padroes
 	if (E[Enemy].sprite){ SPR_releaseSprite(E[Enemy].sprite); E[Enemy].sprite = NULL; }
@@ -5992,6 +5763,8 @@ void ENEMY_STATE(u8 Enemy, u16 State)
 	E[Enemy].dataAnim[1]    = 1;
 	E[Enemy].animFrameTotal = 1;
 	E[Enemy].state = State;
+
+	
 	
 	FUNCAO_PLAY_SND(E[Enemy].id, State, Enemy); //SOUND; SFX!
 	
@@ -7907,7 +7680,7 @@ void ENEMY_STATE(u8 Enemy, u16 State)
 	
 }
 
-void FUNCAO_INIT_PLAYERS()
+void FUNCAO_INIT_PLAYERS(void)
 {
 	//configuracoes iniciais dos players
 	
@@ -8032,7 +7805,7 @@ void FUNCAO_INIT_PLAYERS()
 	
 }
 
-void CREATE_ENEMY(u8 ID, u16 State, s16 pX, s16 pY)
+void CREATE_ENEMY(const u8 ID, const u16 State, const s16 pX, const s16 pY)
 {
 	qtdeInimigos++;
 	//ENEMY
@@ -8062,7 +7835,7 @@ void CREATE_ENEMY(u8 ID, u16 State, s16 pX, s16 pY)
 	ENEMY_STATE(qtdeInimigos, State);
 }
 
-void FUNCAO_FISICA()
+void FUNCAO_FISICA(void)
 {
 	LimiterX = (segmentLimiter-1)*160;
 	
@@ -8570,7 +8343,7 @@ void FUNCAO_FISICA()
 	
 }
 
-void FUNCAO_CAMERA()
+void FUNCAO_CAMERA(void)
 {
 	//AVANCO DE TELA! CONTROLE DE SCROOLING!
 	//restringe o movimento na horizontal
@@ -8664,7 +8437,7 @@ void FUNCAO_CAMERA()
 	if( camPosX<LimiterX ){ camPosX=LimiterX; } 
 }
 
-void FUNCAO_FSM()
+void FUNCAO_FSM(void)
 {
 	//modificador dos estados dos players
 	
@@ -9064,7 +8837,7 @@ void FUNCAO_FSM()
 	
 }
 
-void FUNCAO_GERENCIAR_OBJS()
+void FUNCAO_GERENCIAR_OBJS(void)
 {
 	//Objetos usados no cenario
 	
@@ -9133,7 +8906,7 @@ void FUNCAO_GERENCIAR_OBJS()
 	
 }
 
-void FUNCAO_MOVER_OBJS()
+void FUNCAO_MOVER_OBJS(void)
 {
 	if(GE01!=NULL){ SPR_setPosition(GE01,   5-camPosX,  70-camPosY); }
 	if(GE02!=NULL){ SPR_setPosition(GE02, 490-camPosX,  16-camPosY); }
@@ -9143,7 +8916,7 @@ void FUNCAO_MOVER_OBJS()
 	if(GE06!=NULL){ SPR_setPosition(GE06,  42-camPosX,  53-camPosY); }
 }
 
-void FUNCAO_SPRITE_POSITION()
+void FUNCAO_SPRITE_POSITION(void)
 {
 	//Virtual Position
 	//X
@@ -9234,7 +9007,7 @@ void FUNCAO_SPRITE_POSITION()
 	}
 }
 
-void FUNCAO_CTRL_SLOTS_BGS()
+void FUNCAO_CTRL_SLOTS_BGS(void)
 {
 	s8 updateSlot = 0; //valor 1 (atualiza bg a direita) ; valor -1 (atualiza bg a esquerda)
 			
@@ -10051,7 +9824,7 @@ void FUNCAO_CTRL_SLOTS_BGS()
 
 }
 
-void FUNCAO_ANIMACAO() //controles de animacao do Player e Enemys
+void FUNCAO_ANIMACAO(void) //controles de animacao do Player e Enemys
 {
 	//desliga a visibilidade das infos dos inimigos atingidos
 	if(P[1].CountDownEnemyInfo>0){P[1].CountDownEnemyInfo--;}
@@ -10369,7 +10142,7 @@ void FUNCAO_PLAY_SND(u8 CharID, u16 State, u8 Chanel)
 	
 }
 
-void FUNCAO_FSM_HITBOXES(u8 Player)
+void FUNCAO_FSM_HITBOXES(const u8 Player)
 {
 	bool reset_BBox=0;
 	bool reset_HBox=0;
@@ -11212,7 +10985,7 @@ void FUNCAO_FSM_HITBOXES(u8 Player)
 	
 }
 
-void FUNCAO_FSM_HITBOXES_ENEMYS(u8 Enemy)
+void FUNCAO_FSM_HITBOXES_ENEMYS(const u8 Enemy)
 {
 	bool reset_BBox=0;
 	bool reset_HBox=0;
@@ -11965,7 +11738,10 @@ void FUNCAO_FSM_HITBOXES_ENEMYS(u8 Enemy)
 	
 }
 
-bool FUNCAO_COLISAO(s16 R1x1, s16 R1y1, s16 R1x2, s16 R1y2, s16 R2x1, s16 R2y1, s16 R2x2, s16 R2y2)
+bool FUNCAO_COLISAO(s16 R1x1, const s16 R1y1,
+					s16 R1x2, const s16 R1y2,
+					s16 R2x1, const s16 R2y1,
+					s16 R2x2, const s16 R2y2)
 {
 	
 	s16 temp=0;
@@ -11990,7 +11766,7 @@ bool FUNCAO_COLISAO(s16 R1x1, s16 R1y1, s16 R1x2, s16 R1y2, s16 R2x1, s16 R2y1, 
 	}
 }
 
-void CLEAR_VDP()
+void CLEAR_VDP(void)
 {
 	SYS_disableInts();
 	SPR_reset();
