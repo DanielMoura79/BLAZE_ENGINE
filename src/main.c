@@ -31,17 +31,17 @@ void FUNCAO_CAMERA(void);
 void FUNCAO_GERENCIAR_OBJS(void);
 void FUNCAO_MOVER_OBJS(void);
 void FUNCAO_SPRITE_POSITION(void);
-void PLAYER_STATE(const u8 Player, const u16 State);
-void ENEMY_STATE(const u8 Enemy, const u16 State);
+void PLAYER_STATE(const u8 Player, u16 State);
+void ENEMY_STATE(const u8 Enemy, u16 State);
 void FUNCAO_CTRL_SLOTS_BGS(void);
 void FUNCAO_ANIMACAO(void);
 void FUNCAO_PLAY_SND(const u8 CharID, const u16 State, const u8 Chanel);
 void FUNCAO_FSM_HITBOXES(const u8 Player);
 void FUNCAO_FSM_HITBOXES_ENEMYS(const u8 Enemy);
-bool FUNCAO_COLISAO(const s16 R1x1, const s16 R1y1, 
-					const s16 R1x2, const s16 R1y2, 
-					const s16 R2x1, const s16 R2y1,
-					const s16 R2x2, const s16 R2y2);
+bool FUNCAO_COLISAO(s16 R1x1, const s16 R1y1,
+					s16 R1x2, const s16 R1y2,
+					s16 R2x1, const s16 R2y1,
+					s16 R2x2, const s16 R2y2);
 void CLEAR_VDP(void);
 
 //--- VARIAVEIS ---//
