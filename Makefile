@@ -81,7 +81,7 @@ ASMO += $(CS:%.c=asmout/%.s)
 
 all: release
 
-release: OPTIONS  = -O3 -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
+release: OPTIONS  = -Os -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
 release: OPTIONS += -fshort-enums -flto -fuse-linker-plugin
 release: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd
 release: out.bin symbol.txt
