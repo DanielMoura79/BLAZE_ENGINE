@@ -1,6 +1,9 @@
 .PHONY: compile
 compile:
-	docker run -it --rm -v "${PWD}":/src sgdk:${SGDK_VERSION}
+	docker run -it --rm \
+	-v "${PWD}":/src \
+	--user $(id -u):$(id -g) \
+	sgdk:${SGDK_VERSION}
 
 SGDK_VERSION=1.70
 SGDK_FOLDER=SGDK
