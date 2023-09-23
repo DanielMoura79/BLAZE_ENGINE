@@ -20,6 +20,8 @@ O comando acima fez:
 
 > Por último, abra o arquivo gerado **./out/rom.bin** no seu emulador genesis "openemu,retroarch,etc"
 
+![image](https://github.com/DanielMoura79/BLAZE_ENGINE/assets/9255997/8daad171-b0e4-4187-a869-056712b36459)
+
 ou através do cmake
 
 ```shell
