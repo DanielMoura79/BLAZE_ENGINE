@@ -25,7 +25,5 @@ O comando acima fez:
 ou através do cmake
 
 ```shell
-mkdir build
-cd build
-cmake ..
+make build
 ```
