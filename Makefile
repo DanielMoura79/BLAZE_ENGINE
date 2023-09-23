@@ -1,4 +1,4 @@
-.PHONY: compile
+.PHONY: compile	build
 compile:
 	docker run -it --rm \
 	-v "${PWD}":/src \
@@ -23,6 +23,13 @@ shell:
 
 clean:
 	rm -rf out/*
+
+build:
+	mkdir -p build && \
+	cd build && \
+	cmake ..  && \
+	make
+
 
 format:
 	clang-format -i src/main.c
